@@ -113,7 +113,7 @@ test('truncate does not split wide characters', () => {
   assert.equal(truncate('中文字符', 5), '中文…');
   assert.equal(truncate('中文字符', 4), '中…');
   assert.equal(truncate('中文字符', 5, { position: 'start' }), '…字符');
-  assert.equal(truncate('中文字符集', 6, { position: 'middle' }), '中…字符集'.length === 0 ? '' : '中…集');
+  assert.equal(truncate('中文字符集', 6, { position: 'middle' }), '中…集');
   assert.ok(stringWidth(truncate('中文字符', 4)) <= 4);
 });
 
