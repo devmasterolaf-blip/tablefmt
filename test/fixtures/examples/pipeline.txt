@@ -1,0 +1,25 @@
+# text
+┌─────────┬───────┬────────────┐
+│ country │ city  │ population │
+├─────────┼───────┼────────────┤
+│ FR      │ Nice  │     342000 │
+│ IT      │ Rome  │    2760000 │
+│ IT      │ Milan │    1370000 │
+│ NO      │ Oslo  │     709000 │
+└─────────┴───────┴────────────┘
+
+# markdown
+| country | city  | population |
+| ------- | ----- | ---------: |
+| FR      | Nice  |     342000 |
+| IT      | Rome  |    2760000 |
+| IT      | Milan |    1370000 |
+| NO      | Oslo  |     709000 |
+
+# csv
+country,city,population
+FR,Nice,342000
+IT,Rome,2760000
+IT,Milan,1370000
+NO,Oslo,709000
+
