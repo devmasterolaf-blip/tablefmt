@@ -117,8 +117,9 @@ export function renderText(table, options) {
  * streaming renderer to draw rows with widths that were fixed up front.
  * @param {Table} table
  * @param {import('../table.js').TableOptions & TextRenderOptions} [options]
- * @param {{widths?: number[], bare?: boolean}} [internal] `widths` skips
- *   measuring; `bare` leaves out the top and bottom rules
+ * @param {{widths?: number[], bare?: boolean, striped?: boolean}} [internal]
+ *   `widths` skips measuring; `bare` leaves out the top and bottom rules;
+ *   `striped` gives every body row the zebra style
  * @returns {string[]}
  */
 export function renderLines(table, options, internal = {}) {
@@ -145,7 +146,9 @@ export function renderLines(table, options, internal = {}) {
   const zebraSgr = opts.zebra === true ? styleToSgr(DEFAULT_ZEBRA) : opts.zebra ? styleToSgr(opts.zebra) : '';
   const headerSgr = styleToSgr(opts.headerStyle ?? DEFAULT_HEADER_STYLE);
   const footerSgr = styleToSgr(opts.footerStyle);
-  const striped = stripedRows(grid, zebraSgr !== '');
+  const striped = internal.striped
+    ? grid.rows.map((row) => row.section === 'body' && !row.source.title)
+    : stripedRows(grid, zebraSgr !== '');
 
   /** @type {Map<Placed, string>} */
   const texts = new Map();
