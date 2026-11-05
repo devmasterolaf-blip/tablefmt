@@ -1,0 +1,4 @@
+[
+  {"name": "apple", "qty": 3, "tags": ["red", "green"]},
+  {"name": "kiwi", "qty": 12, "origin": "NZ"}
+]

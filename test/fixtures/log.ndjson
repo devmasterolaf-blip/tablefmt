@@ -1,0 +1,4 @@
+{"level":"info","msg":"started","ms":12}
+{"level":"warn","msg":"slow request","ms":950}
+
+{"level":"info","msg":"done","ms":3}
