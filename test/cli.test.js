@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { main, parseArgs, HELP, EXIT } from '../src/cli.js';
 import { UsageError } from '../src/errors.js';
@@ -247,4 +247,18 @@ test('the installed command works end to end', () => {
   assert.match(bad.stderr, /invalid --format "yaml"/);
   const missing = spawnSync(process.execPath, [bin, fixture('nope.json')], { encoding: 'utf8' });
   assert.equal(missing.status, 1);
+});
+
+test('a reader that stops early does not crash the command', async () => {
+  let input = 'id,name\n';
+  for (let i = 0; i < 40000; i++) input += `${i},user ${i}\n`;
+  const child = spawn(process.execPath, [bin, '-s', 'ascii'], { stdio: ['pipe', 'pipe', 'pipe'] });
+  let stderr = '';
+  child.stderr.on('data', (chunk) => (stderr += chunk));
+  child.stdin.on('error', () => {});
+  child.stdout.once('data', () => child.stdout.destroy());
+  child.stdin.end(input);
+  const code = await new Promise((resolve) => child.on('close', resolve));
+  assert.equal(stderr, '');
+  assert.equal(code, 0);
 });
