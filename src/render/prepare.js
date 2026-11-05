@@ -86,3 +86,33 @@ export function prepare(table, renderOptions, extraKeys = []) {
     },
   };
 }
+
+/**
+ * @typedef {object} FlatRow one grid row with spans flattened away
+ * @property {'header' | 'body' | 'footer'} section
+ * @property {boolean} title whether this is a group title row
+ * @property {number} group group number of a body row
+ * @property {string[]} cells one text per column; a spanning cell puts its
+ *   text in its top-left slot and leaves the other slots empty
+ */
+
+/**
+ * Flatten a prepared table to plain rows of strings, for output formats
+ * that cannot express spans.
+ * @param {Prepared} prepared
+ * @param {(content: string | Table) => string} convert turns the display
+ *   text of a cell, or the nested table it holds, into output text
+ * @returns {FlatRow[]}
+ */
+export function flatten(prepared, convert) {
+  const { grid } = prepared;
+  return grid.rows.map((row, r) => ({
+    section: row.section,
+    title: row.source.title,
+    group: row.source.group,
+    cells: grid.slots[r].map((placed, c) => {
+      if (placed.row !== r || placed.col !== c) return '';
+      return convert(prepared.content(placed));
+    }),
+  }));
+}
